@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pythonapi-project-deployment
+  namespace: mnd476
+spec:
+  selector:
+    matchLabels:
+      app: pythonapi-project-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pythonapi-project-deployment
+    spec:
+      initContainers:
+      - name: init-wait-for-redis
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nslookup redis; do echo waiting for redis; sleep 2; done;']
+      containers:
+      - name: pythonapi-project-deployment
+        image: milandean/project-container:latest
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20

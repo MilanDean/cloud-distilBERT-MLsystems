@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-project-deployment
+  namespace: mnd476
+spec:
+  selector:
+    matchLabels:
+      app: redis-project-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis-project-deployment
+    spec:
+      containers:
+      - name: redis-project-deployment
+        image: redis:latest
+        ports:
+        - containerPort: 6379

@@ -1,0 +1,8 @@
+---
+namespace: mnd476
+bases:
+  - ../../bases
+patches:
+  - path: patch-deployment-lab4.yaml
+    target:
+      kind: Deployment

@@ -1,0 +1,25 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: project
+spec:
+  hosts:
+    - mnd476.mids255.com
+  gateways:
+    - istio-ingress/mnd476-gateway
+  http:
+    - match:
+        - uri:
+            exact: /predict
+        - uri:
+            prefix: /health
+        - uri:
+            prefix: /docs
+        - uri:
+            prefix: /openapi.json
+      route:
+        - destination:
+            host: project
+            port:
+              number: 8000
